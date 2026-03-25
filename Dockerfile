@@ -1,5 +1,8 @@
 FROM python:3.11-slim
 
+# Pevná cesta kde bude Chromium — musí byť nastavená PRED inštaláciou aj za runtime
+ENV PLAYWRIGHT_BROWSERS_PATH=/pw-browsers
+
 # Systémové knižnice ktoré Chromium potrebuje
 RUN apt-get update && apt-get install -y \
     wget curl gnupg ca-certificates \
@@ -15,7 +18,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Nainštaluj Chromium cez Playwright (tu sme root, takže to funguje)
+# Inštaluj Chromium do /pw-browsers
 RUN playwright install chromium
 
 COPY main.py .
